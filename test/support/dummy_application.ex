@@ -11,7 +11,7 @@ defmodule DummyApplication do
   end
 
   get "/slow" do
-    :timer.sleep 50
+    Process.sleep 50
     conn
       |> put_resp_header("X-Request-Id", "custom-value")
       |> send_resp(200, "This is slow")
