@@ -16,7 +16,7 @@ defmodule Thrust.Mixfile do
   def application do
     [mod: {Thrust, []},
      applications: [:phoenix, :phoenix_pubsub, :phoenix_html, :cowboy, :logger, :gettext,
-                    :phoenix_ecto, :postgrex]]
+                    :phoenix_ecto, :postgrex, :httpotion]]
   end
 
   defp elixirc_paths(:travis), do: elixirc_paths(:test)
