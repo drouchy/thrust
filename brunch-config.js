@@ -2,51 +2,54 @@ exports.config = {
   // See http://brunch.io/#documentation for docs.
   files: {
     javascripts: {
-      joinTo: "js/app.js"
+      joinTo: 'js/app.js',
 
       // To use a separate vendor.js bundle, specify two files path
       // http://brunch.io/docs/config#-files-
       // joinTo: {
-      //  "js/app.js": /^(web\/static\/js)/,
-      //  "js/vendor.js": /^(web\/static\/vendor)|(deps)/
+      //  'js/app.js': /^(web\/static\/js)/,
+      //  'js/vendor.js': /^(web\/static\/vendor)|(deps)/
       // }
       //
       // To change the order of concatenation of files, explicitly mention here
-      // order: {
-      //   before: [
-      //     "web/static/vendor/js/jquery-2.1.1.js",
-      //     "web/static/vendor/js/bootstrap.min.js"
-      //   ]
-      // }
+      order: {
+        before: [
+          'web/static/vendor/js/jquery.js',
+          'web/static/vendor/js/bootstrap.js'
+        ]
+      }
     },
     stylesheets: {
-      joinTo: "css/app.css",
+      joinTo: 'css/app.css',
       order: {
-        after: ["web/static/css/app.css"] // concat app.css last
+        after: ['web/static/css/app.scss'] // concat app.css last
       }
     },
     templates: {
-      joinTo: "js/app.js"
+      joinTo: 'js/app.js'
     }
   },
 
   conventions: {
     // This option sets where we should place non-css and non-js assets in.
-    // By default, we set this to "/web/static/assets". Files in this directory
-    // will be copied to `paths.public`, which is "priv/static" by default.
-    assets: /^(web\/static\/assets)/
+    // By default, we set this to '/web/static/assets'. Files in this directory
+    // will be copied to `paths.public`, which is 'priv/static' by default.
+    assets: [
+      /^(web\/static\/assets)/,
+      /^(node_modules\/font-awesome)/
+    ]
   },
 
   // Phoenix paths configuration
   paths: {
     // Dependencies and current project directories to watch
     watched: [
-      "web/static",
-      "test/static"
+      'web/static',
+      'test/static'
     ],
 
     // Where to compile files to
-    public: "priv/static"
+    public: 'priv/static'
   },
 
   // Configure your plugins
@@ -54,12 +57,15 @@ exports.config = {
     babel: {
       // Do not use ES6 compiler in vendor code
       ignore: [/web\/static\/vendor/]
+    },
+    sass: {
+      mode: "native" // This is the important part!
     }
   },
 
   modules: {
     autoRequire: {
-      "js/app.js": ["web/static/js/app"]
+      'js/app.js': ['web/static/js/app']
     }
   },
 

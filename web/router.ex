@@ -19,6 +19,8 @@ defmodule Thrust.Router do
     get "/", PageController, :index
   end
 
+  # Other Stuff ...
+
   # Other scopes may use custom stacks.
   # scope "/api", Thrust do
   #   pipe_through :api
