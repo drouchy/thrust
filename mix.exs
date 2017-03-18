@@ -29,11 +29,12 @@ defmodule Thrust.Mixfile do
      {:phoenix_ecto, "~> 3.0"},
      {:postgrex, ">= 0.0.0"},
      {:phoenix_html, "~> 2.6"},
-     {:phoenix_live_reload, "~> 1.0", only: :dev},
      {:gettext, "~> 0.11"},
      {:timex, "~> 3.1"},
      {:httpotion, "~> 3.0"},
-     {:cowboy, "~> 1.0"}]
+     {:cowboy, "~> 1.0"},
+     {:phoenix_live_reload, "~> 1.0", only: :dev},
+     {:mix_test_watch, "~> 0.3.3", only: :dev, runtime: false}]
   end
 
   defp aliases do
