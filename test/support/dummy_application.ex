@@ -10,6 +10,13 @@ defmodule DummyApplication do
       |> send_resp(200, "Welcome")
   end
 
+  get "/slow" do
+    :timer.sleep 50
+    conn
+      |> put_resp_header("X-Request-Id", "custom-value")
+      |> send_resp(200, "This is slow")
+  end
+
   match _, do: send_resp(conn, 404, "Oops!")
 
 
