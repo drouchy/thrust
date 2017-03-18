@@ -1,0 +1,26 @@
+language: elixir
+elixir:
+  - 1.4.2
+otp_release:
+  - 18.2.1
+
+services:
+  - postgresql
+
+env:
+  global:
+    - MIX_ENV=travis
+
+install:
+  - psql -c 'create database travis_ci_test;' -U postgres
+  - mix local.hex --force
+  - mix local.rebar --force
+  - mix deps.get
+
+before_script:
+  - kerl list installations
+  - mix deps.compile
+  - mix compile
+  
+script:
+  - mix test
