@@ -1,4 +1,4 @@
-defmodule Thrust.Generators.UniformTest do
+defmodule Thrust.Checks.Generators.UniformTest do
   use ExUnit.Case
   use EQC.ExUnit
 
