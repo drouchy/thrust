@@ -1,5 +1,5 @@
 defmodule Thrust.Generators.UniformTest do
-  use ExUnit.Case
+  use ExUnit.Case, async: true
 
   alias Thrust.Generators.Uniform
 

@@ -21,7 +21,7 @@ defmodule Thrust.QuartzTest do
   end
 
   test "executes the function every second", %{quartz: quartz} do
-    this = self
+    this = self()
     :ok = Quartz.start(quartz, :timer3, fn -> send(this, :ok) end)
 
     assert_receive :ok, 110
@@ -35,7 +35,7 @@ defmodule Thrust.QuartzTest do
 
   # stop/2
   test "stoping a timer stops the process", %{quartz: quartz} do
-    this = self
+    this = self()
     Quartz.start(quartz, :timer5, fn -> send(this, :done) end)
 
     assert_receive :done, 110

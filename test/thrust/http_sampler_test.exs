@@ -1,5 +1,6 @@
 defmodule Thrust.HttpSamplerTest do
 	use ExUnit.Case
+
 	alias Thrust.HttpSampler, as: Sampler
 
   test "execute the request" do

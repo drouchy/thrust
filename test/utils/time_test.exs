@@ -1,5 +1,5 @@
 defmodule Thrust.Utils.TimeTest do
-  use ExUnit.Case
+  use ExUnit.Case, async: true
 
   alias Thrust.Utils.Time
 
