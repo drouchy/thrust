@@ -13,3 +13,6 @@ config :thrust, Thrust.Repo,
   database: "thrust_test",
   hostname: "localhost",
   pool: Ecto.Adapters.SQL.Sandbox
+
+config :thrust,
+  nb_test_per_check: 200

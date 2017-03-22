@@ -20,7 +20,8 @@ install:
 before_script:
   - kerl list installations
   - mix deps.compile
+  - mix eqc.install --mini
   - mix compile
-  
+
 script:
   - mix test

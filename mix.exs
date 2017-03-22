@@ -9,6 +9,7 @@ defmodule Thrust.Mixfile do
      compilers: [:phoenix, :gettext] ++ Mix.compilers,
      build_embedded: Mix.env == :prod,
      start_permanent: Mix.env == :prod,
+     test_pattern: "*_{test,check}.exs",
      aliases: aliases(),
      deps: deps()]
   end
@@ -33,8 +34,10 @@ defmodule Thrust.Mixfile do
      {:timex, "~> 3.1"},
      {:httpotion, "~> 3.0"},
      {:cowboy, "~> 1.0"},
+     {:statistics, "~> 0.4.0"},
      {:phoenix_live_reload, "~> 1.0", only: :dev},
-     {:mix_test_watch, "~> 0.3.3", only: :dev, runtime: false}]
+     {:mix_test_watch, "~> 0.3.3", only: [:dev, :test], runtime: false},
+     {:eqc_ex, "~> 1.4", only: [:dev, :travis, :test]}]
   end
 
   defp aliases do
