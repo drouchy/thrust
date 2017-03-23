@@ -10,7 +10,7 @@ defmodule Thrust.HttpSamplerTest do
 	test "measure the time of execution" do
     %{elapsed: time} = Sampler.sample Map.put(request, :path, "/slow")
 
-    assert_in_delta time, 50, 30
+    assert_in_delta time, 50, 35
   end
 
   def request, do: URI.parse("http://localhost:8080")
