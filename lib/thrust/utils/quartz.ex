@@ -15,7 +15,7 @@ defmodule Thrust.Quartz do
           timers  = Map.get(state, :timers)
           %{
             options: options,
-            timers:  Map.put(timers, name, spawn fn -> execute(to_execute, options[:every]) end)
+            timers:  Map.put(timers, name, start_timer(to_execute, options[:every]))
           }
         end)
         :ok
@@ -23,16 +23,19 @@ defmodule Thrust.Quartz do
     end
   end
 
+  defp start_timer(to_execute, every) do
+    {:ok, ref} = :timer.apply_interval(every, Thrust.Quartz, :execute, [to_execute])
+    ref
+  end
+
   def stop(agent, name) do
     case Agent.get(agent, fn (state) -> Map.get(state, :timers) |> Map.get(name) end) do
       nil -> :not_found
-      pid -> Process.exit(pid, :kill)
+      ref -> :timer.cancel(ref)
     end
   end
 
-  defp execute(to_execute, every) do
-    Process.sleep(every)
+  def execute(to_execute) do
     to_execute.()
-    execute(to_execute, every)
   end
 end

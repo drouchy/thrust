@@ -3,8 +3,9 @@ defmodule Thrust.QuartzTest do
 
   alias Thrust.Quartz
 
+  @timeout 110
   setup do
-    {:ok, quartz} = Quartz.start_link(every: 100)
+    {:ok, quartz} = Quartz.start_link(every: @timeout - 10)
     {:ok, quartz: quartz}
   end
 
@@ -15,17 +16,19 @@ defmodule Thrust.QuartzTest do
 
   test "the started timer is persisted in the agent", %{quartz: quartz} do
     :ok = Quartz.start(quartz, :timer2, fn -> :ok end)
-    ref = Agent.get(quartz, fn (state) -> Map.get(state, :timers) |> Map.get(:timer2) end)
+    {:interval, ref} = Agent.get(quartz, fn (state) -> Map.get(state, :timers) |> Map.get(:timer2) end)
 
-    assert Process.alive?(ref)
+    [{{_, reference}, _, _}] = :ets.tab2list(:timer_tab)
+
+    assert reference == ref
   end
 
   test "executes the function every second", %{quartz: quartz} do
     this = self()
     :ok = Quartz.start(quartz, :timer3, fn -> send(this, :ok) end)
 
-    assert_receive :ok, 110
-    assert_receive :ok, 110
+    assert_receive :ok, @timeout
+    assert_receive :ok, @timeout
   end
 
   test "starting an existing time results :already_exist", %{quartz: quartz} do
@@ -38,9 +41,9 @@ defmodule Thrust.QuartzTest do
     this = self()
     Quartz.start(quartz, :timer5, fn -> send(this, :done) end)
 
-    assert_receive :done, 110
+    assert_receive :done, @timeout
     Quartz.stop(quartz, :timer5)
-    refute_receive :done, 110
+    refute_receive :done, @timeout
   end
 
   test "stopping a non existant timer returns :not_found", %{quartz: quartz} do
