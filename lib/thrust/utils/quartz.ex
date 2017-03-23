@@ -4,7 +4,7 @@ defmodule Thrust.Quartz do
   end
 
   def start_link(options) do
-    Agent.start_link(fn -> %{options: options, timers: %{}} end, name: :quartz)
+    Agent.start_link(fn -> %{options: options, timers: %{}} end, name: Keyword.get(options, :name, :quartz))
   end
 
   def start(agent, name, to_execute) do

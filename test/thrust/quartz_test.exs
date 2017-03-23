@@ -4,8 +4,13 @@ defmodule Thrust.QuartzTest do
   alias Thrust.Quartz
 
   @timeout 110
+
   setup do
-    {:ok, quartz} = Quartz.start_link(every: @timeout - 10)
+    {:ok, quartz} = Quartz.start_link(every: @timeout - 10, name: :quartz_test)
+    on_exit fn ->
+      Process.exit(quartz, :normal)
+    end
+    
     {:ok, quartz: quartz}
   end
 
