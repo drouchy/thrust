@@ -11,6 +11,7 @@ defmodule Thrust.Mixfile do
      start_permanent: Mix.env == :prod,
      test_pattern: "*_{test,check}.exs",
      aliases: aliases(),
+     dialyzer: [plt_add_deps: :transitive],
      deps: deps()]
   end
 
@@ -37,7 +38,8 @@ defmodule Thrust.Mixfile do
      {:statistics, "~> 0.4.0"},
      {:phoenix_live_reload, "~> 1.0", only: :dev},
      {:mix_test_watch, "~> 0.3.3", only: [:dev, :test], runtime: false},
-     {:eqc_ex, "~> 1.4", only: [:dev, :travis, :test]}]
+     {:eqc_ex, "~> 1.4", only: [:dev, :travis, :test]},
+     {:dialyxir, "~> 0.5", only: [:dev, :travis], runtime: false}]
   end
 
   defp aliases do

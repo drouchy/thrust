@@ -3,7 +3,7 @@ defmodule Thrust.Generators.Uniform do
 
   require Logger
 
-  def distribute(total, nb_slots, _options \\ %{}) do
+  def distribute(total, nb_slots, _options \\ []) do
   (1..nb_slots)
     |> Enum.map(fn (index) ->
       slot_value(index, total, nb_slots)
@@ -13,10 +13,10 @@ defmodule Thrust.Generators.Uniform do
   def stream(total, nb_slots, [type: :infinite]) do
     Logger.debug fn ->  "Building an uniform infinite stream" end
 
-    stream(total, nb_slots) |> Stream.cycle
+    stream(total, nb_slots, [])# |> Stream.cycle
   end
 
-  def stream(total, nb_slots) do
+  def stream(total, nb_slots, _options) do
     Logger.debug fn ->  "Building a uniform finite stream" end
 
     Stream.resource( fn -> Enum.to_list 1..nb_slots end,

@@ -10,6 +10,7 @@ services:
 env:
   global:
     - MIX_ENV=travis
+    - MIX_HOME=$HOME/.kiex/mix
 
 install:
   - psql -c 'create database travis_ci_test;' -U postgres
@@ -22,6 +23,13 @@ before_script:
   - mix deps.compile
   - mix eqc.install --mini
   - mix compile
+  - mix dialyzer --plt
 
 script:
   - mix test
+
+cache:
+  directories:
+  - $HOME/.kiex
+  - _build
+  - deps
