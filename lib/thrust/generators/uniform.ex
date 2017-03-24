@@ -10,10 +10,14 @@ defmodule Thrust.Generators.Uniform do
     end)
   end
 
+  def stream(total, nb_slots) do
+    stream(total, nb_slots, [])
+  end
+
   def stream(total, nb_slots, [type: :infinite]) do
     Logger.debug fn ->  "Building an uniform infinite stream" end
 
-    stream(total, nb_slots, [])# |> Stream.cycle
+    stream(total, nb_slots, []) |> Stream.cycle
   end
 
   def stream(total, nb_slots, _options) do
@@ -26,7 +30,7 @@ defmodule Thrust.Generators.Uniform do
           [slot|rest]   -> {[slot_value(slot, total, nb_slots)], rest}
         end
       end,
-      fn (_) -> end)
+      fn (_) -> :ok end)
   end
 
   defp slot_value(index, total, nb_slots) do

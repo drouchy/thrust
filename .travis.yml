@@ -21,7 +21,7 @@ install:
 before_script:
   - kerl list installations
   - mix deps.compile
-  - mix eqc.install --mini
+  - mix eqc.install --mini --force
   - mix compile
   - mix dialyzer --plt
 
