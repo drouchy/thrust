@@ -32,9 +32,11 @@ defmodule Thrust.Quartz do
   end
 
   def stop(agent, name) do
-    case Agent.get(agent, fn (state) -> Map.get(state, :timers) |> Map.get(name) end) do
+    case Agent.get(agent, fn (state) -> get_in(state, [:timers, name]) end) do
       nil -> :not_found
-      ref -> :timer.cancel(ref)
+      ref ->
+        :timer.cancel(ref)
+        Agent.update(agent, fn(state) -> put_in(state, [:timers, name], nil) end)
     end
   end
 

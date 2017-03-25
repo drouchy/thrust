@@ -1,5 +1,5 @@
 defmodule Thrust.QuartzTest do
-  use ExUnit.Case
+  use ExUnit.Case, async: false
 
   alias Thrust.Quartz
 
@@ -9,6 +9,7 @@ defmodule Thrust.QuartzTest do
     {:ok, quartz} = Quartz.start_link(every: @timeout - 10, name: :quartz_test)
     on_exit fn ->
       Process.exit(quartz, :normal)
+      Quartz.stop(:ping)
       case Process.whereis(:quartz) do
         nil -> :ok
         pid -> Process.exit(pid, :normal)
@@ -18,7 +19,7 @@ defmodule Thrust.QuartzTest do
     {:ok, quartz: quartz}
   end
 
-  # start/4
+  #start/4
   test "starting a new timer returns :ok", %{quartz: quartz} do
     :ok = Quartz.start(quartz, :timer1, fn -> :ok end, [])
   end
@@ -63,22 +64,22 @@ defmodule Thrust.QuartzTest do
   test "starts the scheduler for the supervise agent in the application" do
     this = self()
     :ok = Quartz.start(:ping, fn -> send(this, :done) end)
-    assert_receive :done, @timeout
+    assert_receive :done, 3_000
   end
 
   test "starts the scheduler, and can customise the every parameter" do
     this = self()
-    :ok = Quartz.start(:ping3, fn -> send(this, :done) end, every: 2_000)
-    refute_receive :done, @timeout
+    :ok = Quartz.start(:ping, fn -> send(this, :done) end, every: 2_000)
+    refute_receive :done, 1_000
   end
 
   # stop/2
   test "stops the scheduler for the supervise agent in the application" do
     this = self()
-    Quartz.start(:ping2, fn -> send(this, :done) end)
-    assert_receive :done, @timeout
+    Quartz.start(:ping, fn -> send(this, :done) end)
+    assert_receive :done, 3_000
 
-    Quartz.stop(:ping2)
-    refute_receive :done, @timeout
+    Quartz.stop(:ping)
+    refute_receive :done, 1_000
   end
 end
