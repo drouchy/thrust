@@ -10,12 +10,12 @@ defmodule Thrust.Quartz do
     Agent.start_link(fn -> %{options: options, timers: %{}} end, name: Keyword.get(options, :name, :quartz))
   end
 
-  def start(agent, name, to_execute) do
+  def start(agent, name, to_execute, args) do
     case Agent.get(agent, fn (state) -> Map.get(state, :timers) |> Map.get(name) end) do
       nil ->
         Agent.update(agent, fn(state) ->
-          options = Map.get(state, :options)
-         timers  = Map.get(state, :timers)
+          options = Keyword.merge(Map.get(state, :options), args)
+          timers  = Map.get(state, :timers)
           %{
             options: options,
             timers:  Map.put(timers, name, start_timer(to_execute, options[:every]))
@@ -43,9 +43,9 @@ defmodule Thrust.Quartz do
   end
 
   # Client API
-  def start(name, to_execute) do
-    Logger.debug fn -> "Starting the #{name} scheduler" end
-    Thrust.Quartz.start(:quartz, name, to_execute)
+  def start(name, to_execute, args \\ []) do
+    Logger.debug fn -> "Starting the #{name} scheduler with options #{inspect args}" end
+    Thrust.Quartz.start(:quartz, name, to_execute, args)
   end
 
   def stop(name) do

@@ -1,5 +1,5 @@
 defmodule Thrust.Stages.RequestProducerTest do
-  use ExUnit.Case
+  use ExUnit.Case, async: true
 
   alias Thrust.Stages.RequestProducer, as: Producer
 
