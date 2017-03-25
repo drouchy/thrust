@@ -9,8 +9,12 @@ defmodule Thrust.QuartzTest do
     {:ok, quartz} = Quartz.start_link(every: @timeout - 10, name: :quartz_test)
     on_exit fn ->
       Process.exit(quartz, :normal)
+      case Process.whereis(:quartz) do
+        nil -> :ok
+        pid -> Process.exit(pid, :normal)
+      end
     end
-    
+
     {:ok, quartz: quartz}
   end
 
@@ -21,11 +25,11 @@ defmodule Thrust.QuartzTest do
 
   test "the started timer is persisted in the agent", %{quartz: quartz} do
     :ok = Quartz.start(quartz, :timer2, fn -> :ok end)
-    {:interval, ref} = Agent.get(quartz, fn (state) -> Map.get(state, :timers) |> Map.get(:timer2) end)
+    {:interval, ref} = Agent.get(quartz, fn (state) -> get_in(state, [:timers, :timer2]) end)
 
-    [{{_, reference}, _, _}] = :ets.tab2list(:timer_tab)
+    reference =  :ets.tab2list(:timer_tab) |> Enum.find(fn ({{_, r}, _, _}) -> r == ref end)
 
-    assert reference == ref
+    assert reference != nil
   end
 
   test "executes the function every second", %{quartz: quartz} do
@@ -53,5 +57,22 @@ defmodule Thrust.QuartzTest do
 
   test "stopping a non existant timer returns :not_found", %{quartz: quartz} do
     :not_found = Quartz.stop(quartz, :foo)
+  end
+
+  # start/2
+  test "starts the scheduler for the supervise agent in the application" do
+    this = self()
+    :ok = Quartz.start(:ping, fn -> send(this, :done) end)
+    assert_receive :done, @timeout
+  end
+
+  # stop/2
+  test "stops the scheduler for the supervise agent in the application" do
+    this = self()
+    Quartz.start(:ping2, fn -> send(this, :done) end)
+    assert_receive :done, @timeout
+
+    Quartz.stop(:ping2)
+    refute_receive :done, @timeout
   end
 end

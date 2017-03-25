@@ -19,7 +19,6 @@ defmodule DummyApplication do
 
   match _, do: send_resp(conn, 404, "Oops!")
 
-
   def start do
     children = [
       Plug.Adapters.Cowboy.child_spec(:http, DummyApplication, [], port: 8080)

@@ -30,3 +30,6 @@ config :thrust, Thrust.Repo,
   database: "thrust_dev",
   hostname: "localhost",
   pool_size: 10
+
+config :thrust, Thrust.Quartz,
+  every: 1_000

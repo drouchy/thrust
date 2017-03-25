@@ -1,6 +1,9 @@
 defmodule Thrust.Quartz do
+  require Logger
+
   def start_link do
-    start_link(every: 1000)
+    Logger.info "Starting quartz with a schedule config #{inspect Application.get_env(:thrust, Thrust.Quartz)}"
+    start_link(Application.get_env(:thrust, Thrust.Quartz))
   end
 
   def start_link(options) do
@@ -9,10 +12,10 @@ defmodule Thrust.Quartz do
 
   def start(agent, name, to_execute) do
     case Agent.get(agent, fn (state) -> Map.get(state, :timers) |> Map.get(name) end) do
-      nil -> 
+      nil ->
         Agent.update(agent, fn(state) ->
           options = Map.get(state, :options)
-          timers  = Map.get(state, :timers)
+         timers  = Map.get(state, :timers)
           %{
             options: options,
             timers:  Map.put(timers, name, start_timer(to_execute, options[:every]))
@@ -37,5 +40,16 @@ defmodule Thrust.Quartz do
 
   def execute(to_execute) do
     to_execute.()
+  end
+
+  # Client API
+  def start(name, to_execute) do
+    Logger.debug fn -> "Starting the #{name} scheduler" end
+    Thrust.Quartz.start(:quartz, name, to_execute)
+  end
+
+  def stop(name) do
+    Logger.debug fn -> "Stopping the #{name} scheduler" end
+    Thrust.Quartz.stop(:quartz, name)
   end
 end
