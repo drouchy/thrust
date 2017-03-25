@@ -12,6 +12,7 @@ defmodule Thrust.Mixfile do
      test_pattern: "*_{test,check}.exs",
      aliases: aliases(),
      dialyzer: [plt_add_deps: :transitive],
+     test_coverage: [tool: ExCoveralls],
      deps: deps()]
   end
 
@@ -39,6 +40,7 @@ defmodule Thrust.Mixfile do
      {:phoenix_live_reload, "~> 1.0", only: :dev},
      {:mix_test_watch, "~> 0.3.3", only: [:dev, :test], runtime: false},
      {:eqc_ex, "~> 1.4", only: [:dev, :travis, :test]},
+     {:excoveralls, "~> 0.6", only: [:test, :travis]},
      {:dialyxir, "~> 0.5", only: [:dev, :travis], runtime: false}]
   end
 
