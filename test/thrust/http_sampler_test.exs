@@ -4,7 +4,7 @@ defmodule Thrust.HttpSamplerTest do
 	alias Thrust.HttpSampler, as: Sampler
 
   test "execute the request" do
-    %Thrust.Response{status: 200, body: "Welcome", headers: headers, error: nil} = Sampler.sample request
+    %Thrust.HttpResponse{status: 200, body: "Welcome", headers: headers, error: nil} = Sampler.sample request
   end
 
 	test "measure the time of execution" do

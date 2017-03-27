@@ -20,7 +20,7 @@ defmodule Thrust.Stages.HttpRequestSamplerProducerConsumer do
         response: sampler.sample(event)
       }
     end)
-
+    Logger.debug fn -> "Emitting #{Enum.count result} request sampled" end
     {:noreply, result, state}
   end
 
