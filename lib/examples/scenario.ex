@@ -1,4 +1,4 @@
-defmodule DummyApplication do
+defmodule SimpleApplication do
   use Plug.Router
 
   plug :match
@@ -21,7 +21,7 @@ defmodule DummyApplication do
 
   def start do
     children = [
-      Plug.Adapters.Cowboy.child_spec(:http, DummyApplication, [], port: 8080)
+      Plug.Adapters.Cowboy.child_spec(:http, SimpleApplication, [], port: 8080)
     ]
     Supervisor.start_link(children, strategy: :one_for_one)
   end
@@ -29,7 +29,7 @@ end
 
 defmodule Scenario do
   def start do
-    {:ok, dummy} = DummyApplication.start
+    {:ok, dummy} = SimpleApplication.start
 
     request = URI.parse("http://localhost:8080")
 
