@@ -3,10 +3,10 @@ defmodule Thrust.Utils.HttpRequestExecutor do
 
   def execute(request) do
     Logger.debug fn -> "executing request #{inspect request}" end
-    
+
     case HTTPotion.get build_url(request) do
-    	%{status_code: status, body: body, headers: headers} -> %Thrust.Response{status: status, body: body, headers: headers.hdrs}
-    	%{message: message}                                  -> %Thrust.Response{error: message}
+    	%{status_code: status, body: body, headers: headers} -> %Thrust.HttpResponse{status: status, body: body, headers: headers.hdrs}
+    	%{message: message}                                  -> %Thrust.HttpResponse{error: message}
     end
   end
 

@@ -4,7 +4,7 @@ config :thrust, Thrust.Endpoint,
   http: [port: 4001],
   server: false
 
-config :logger, level: :warn
+config :logger, level: :error
 
 config :thrust, Thrust.Repo,
   adapter: Ecto.Adapters.Postgres,
@@ -16,3 +16,6 @@ config :thrust, Thrust.Repo,
 
 config :thrust,
   nb_test_per_check: 200
+
+config :thrust, Thrust.Quartz,
+  every: 100

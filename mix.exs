@@ -37,6 +37,7 @@ defmodule Thrust.Mixfile do
      {:httpotion, "~> 3.0"},
      {:cowboy, "~> 1.0"},
      {:statistics, "~> 0.4.0"},
+     {:gen_stage, "~> 0.11"},
      {:phoenix_live_reload, "~> 1.0", only: :dev},
      {:mix_test_watch, "~> 0.3.3", only: [:dev, :test], runtime: false},
      {:eqc_ex, "~> 1.4", only: [:dev, :travis, :test]},

@@ -10,11 +10,10 @@ defmodule Thrust.Supervisors.SchedulerSupervisorTest do
   test "restarts the timer when crashes" do
     pid = Process.whereis(:quartz)
     Process.exit(pid, :kill)
-    
-    assert_eventually fn -> 
+
+    assert_eventually fn ->
       new_pid = Process.whereis(:quartz)
-      assert new_pid != nil
-      assert new_pid != pid
+      new_pid != nil && new_pid != pid
     end
-  end  
+  end
 end
